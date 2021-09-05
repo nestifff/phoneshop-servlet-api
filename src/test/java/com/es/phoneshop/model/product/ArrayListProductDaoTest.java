@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 

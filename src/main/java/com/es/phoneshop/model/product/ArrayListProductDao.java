@@ -21,7 +21,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized Product getProduct(Long id) {
+    public Product getProduct(Long id) {
 
         if (id == null) {
             throw new IllegalArgumentException("Id can't be null");
@@ -38,7 +38,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized List<Product> findProducts() {
+    public List<Product> findProducts() {
 
         lock.readLock().lock();
         try {
@@ -52,7 +52,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public synchronized boolean save(Product product) {
+    public boolean save(Product product) {
 
         if (product.getId() == null) {
 

@@ -54,44 +54,29 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public boolean save(Product product) {
 
-        if (product.getId() == null) {
+        lock.writeLock().lock();
+        try {
 
-            lock.writeLock().lock();
-            try {
+            if (product.getId() == null) {
                 addProduct(product);
                 return true;
-            } finally {
-                lock.writeLock().unlock();
-            }
 
-        } else {
+            } else {
 
-            Product existedProductWithThisId;
+                Product existedProductWithThisId = getProduct(product.getId());
 
-            lock.readLock().lock();
-            try {
-                existedProductWithThisId = products.stream()
-                        .filter(it -> product.getId().equals(it.getId()))
-                        .findAny()
-                        .orElse(null);
-
-            } finally {
-                lock.readLock().unlock();
-            }
-
-            lock.writeLock().lock();
-            try {
                 if (existedProductWithThisId == null) {
                     addProduct(product);
                     return true;
+
                 } else {
                     changeExistingProduct(existedProductWithThisId, product);
                     return false;
                 }
-
-            } finally {
-                lock.writeLock().unlock();
             }
+
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 

@@ -7,15 +7,23 @@ import java.util.List;
 
 public class ProductDaoUtils {
 
-    public static boolean areStringsContainsCommonWords(String str1, String str2) {
+    public static boolean areStringsContainsCommonWords(String query, String whereFind) {
+
+        if (query == null) {
+            return true;
+        }
 
         return !Collections.disjoint(
-                Arrays.asList(str1.toLowerCase().split(" ")),
-                Arrays.asList(str2.toLowerCase().split(" "))
+                Arrays.asList(query.toLowerCase().split(" ")),
+                Arrays.asList(whereFind.toLowerCase().split(" "))
         );
     }
 
     public static int compareByMatchingWordsNum(String whereSearch1, String whereSearch2, String whatSearch) {
+
+        if (whatSearch == null) {
+            return 0;
+        }
 
         List<String> whereSearchWords1 = new ArrayList<>(Arrays.asList(whereSearch1.toLowerCase().split(" ")));
         List<String> whereSearchWords2 = new ArrayList<>(Arrays.asList(whereSearch2.toLowerCase().split(" ")));
@@ -30,5 +38,31 @@ public class ProductDaoUtils {
         int matchIn2 = numToMatchMax - whereSearchWords2.size();
 
         return Integer.compare(matchIn1, matchIn2);
+    }
+
+    public static int compareForSortingFieldOrder(Product product1, Product product2, SortField sortField, SortOrder sortOrder) {
+
+        if (sortField == null || sortOrder == null) {
+            return 0;
+        }
+
+        if (sortField == SortField.description) {
+
+            if (sortOrder == SortOrder.asc) {
+                return product1.getDescription().compareTo(product2.getDescription());
+            } else if (sortOrder == SortOrder.desc) {
+                return product2.getDescription().compareTo(product1.getDescription());
+            }
+
+        } else if (sortField == SortField.price) {
+
+            if (sortOrder == SortOrder.asc) {
+                return product1.getPrice().compareTo(product2.getPrice());
+            } else if (sortOrder == SortOrder.desc) {
+                return product2.getPrice().compareTo(product1.getPrice());
+            }
+        }
+
+        return 0;
     }
 }

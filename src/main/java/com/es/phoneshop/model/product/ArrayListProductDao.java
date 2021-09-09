@@ -8,8 +8,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
-import static com.es.phoneshop.model.product.ProductDaoUtils.areStringsContainsCommonWords;
-import static com.es.phoneshop.model.product.ProductDaoUtils.compareByMatchingWordsNum;
+import static com.es.phoneshop.model.product.ProductDaoUtils.*;
 
 public class ArrayListProductDao implements ProductDao {
 
@@ -41,11 +40,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProducts(String query) {
-
-        if (query == null) {
-            return products;
-        }
+    public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
 
         lock.readLock().lock();
         try {
@@ -61,6 +56,7 @@ public class ArrayListProductDao implements ProductDao {
                                     query
                             )
                     )
+                    .sorted((it1, it2) -> compareForSortingFieldOrder(it1, it2, sortField, sortOrder))
                     .collect(Collectors.toList());
         } finally {
             lock.readLock().unlock();

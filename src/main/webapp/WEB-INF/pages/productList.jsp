@@ -5,6 +5,7 @@
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
+  <br>
   <form>
     <input name="query" value="${param.query}">
     <button>Search</button>
@@ -13,8 +14,15 @@
     <thead>
       <tr>
         <td>Image</td>
-        <td>Description</td>
-        <td class="price">Price</td>
+        <td>Description
+        <a href="?query=${param.query}&sort=description&order=asc">asc</a>
+        <a href="?query=${param.query}&sort=description&order=desc">desc</a>
+        </td>
+        <td class="price">
+          Price
+          <a href="?query=${param.query}&sort=price&order=asc">asc</a>
+          <a href="?query=${param.query}&sort=price&order=desc">desc</a>
+        </td>
       </tr>
     </thead>
     <c:forEach var="product" items="${products}">

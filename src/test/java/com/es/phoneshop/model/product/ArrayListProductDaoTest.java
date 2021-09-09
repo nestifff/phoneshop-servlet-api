@@ -20,7 +20,7 @@ public class ArrayListProductDaoTest {
     @Test
     public void findProducts_returnProperEmptyQuery() {
 
-        List<Product> testProducts = productDao.findProducts("");
+        List<Product> testProducts = productDao.findProducts("", null, null);
         boolean haveNotProper = testProducts.stream()
                 .anyMatch(it ->
                         it.getPrice() == null
@@ -34,7 +34,7 @@ public class ArrayListProductDaoTest {
 
         String query = "Samsung S";
 
-        List<Product> testProducts = productDao.findProducts(query);
+        List<Product> testProducts = productDao.findProducts(query, null, null);
         boolean haveNotProper = testProducts.stream()
                 .anyMatch(it ->
                         it.getPrice() == null || it.getStock() <= 0);
@@ -49,11 +49,47 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
-    public void findProducts_returnProperWithoutQuery() {
+    public void findProducts_returnProperNullQuery() {
 
-        String query = null;
-        List<Product> testProducts = productDao.findProducts(query);
+        List<Product> testProducts = productDao.findProducts(null, null, null);
         assertTrue(testProducts.size() != 0);
+    }
+
+    @Test
+    public void findProducts_returnWithSortDescription() {
+
+        List<Product> testProducts = productDao.findProducts("", SortField.description, SortOrder.asc);
+
+        boolean orderIsRight = true;
+        Product prev = testProducts.get(0);
+        for (int i = 1; i < testProducts.size(); ++i) {
+            if (prev.getDescription().compareTo(testProducts.get(i).getDescription()) >= 0) {
+                orderIsRight = false;
+                break;
+            }
+        }
+
+        assertTrue(orderIsRight);
+    }
+
+    @Test
+    public void findProducts_returnWithQuerySortPrice() {
+
+        String query = "Samsung S";
+
+        List<Product> testProducts = productDao.findProducts(query, SortField.price, SortOrder.asc);
+
+        boolean orderIsRight = true;
+        Product prev = testProducts.get(0);
+        for (int i = 1; i < testProducts.size(); ++i) {
+            if (prev.getPrice().compareTo(testProducts.get(i).getPrice()) >= 0) {
+                orderIsRight = false;
+                break;
+            }
+        }
+
+        assertTrue(orderIsRight);
+        assertTrue(testProducts.size() < productDao.findProducts(null, null, null).size());
     }
 
     @Test

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ProductDao {
     Product getProduct(Long id);
-    List<Product> findProducts();
+    List<Product> findProducts(String query);
     boolean save(Product product);
     boolean delete(Long id);
 }

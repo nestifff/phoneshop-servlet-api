@@ -18,15 +18,42 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
-    public void findProducts_returnProper() {
+    public void findProducts_returnProperEmptyQuery() {
 
-        List<Product> testProducts = productDao.findProducts();
+        List<Product> testProducts = productDao.findProducts("");
         boolean haveNotProper = testProducts.stream()
                 .anyMatch(it ->
                         it.getPrice() == null
                                 || it.getStock() <= 0);
 
         assertFalse(haveNotProper);
+    }
+
+    @Test
+    public void findProducts_returnProperWithQuery() {
+
+        String query = "Samsung S";
+
+        List<Product> testProducts = productDao.findProducts(query);
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0);
+
+        boolean isFoundedWithMatching = testProducts.stream()
+                .allMatch(it ->
+                        ProductDaoUtils.areStringsContainsCommonWords(it.getDescription(), "Samsung S"));
+
+        assertFalse(haveNotProper);
+        assertTrue(isFoundedWithMatching);
+        assertTrue(testProducts.size() != 0);
+    }
+
+    @Test
+    public void findProducts_returnProperWithoutQuery() {
+
+        String query = null;
+        List<Product> testProducts = productDao.findProducts(query);
+        assertTrue(testProducts.size() != 0);
     }
 
     @Test

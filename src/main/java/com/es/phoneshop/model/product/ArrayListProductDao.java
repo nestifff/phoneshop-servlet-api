@@ -8,6 +8,9 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+import static com.es.phoneshop.model.product.ProductDaoUtils.areStringsContainsCommonWords;
+import static com.es.phoneshop.model.product.ProductDaoUtils.compareByMatchingWordsNum;
+
 public class ArrayListProductDao implements ProductDao {
 
     private long maxId;
@@ -38,13 +41,26 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProducts() {
+    public List<Product> findProducts(String query) {
+
+        if (query == null) {
+            return products;
+        }
 
         lock.readLock().lock();
         try {
             return products.stream()
                     .filter(it -> it.getPrice() != null)
                     .filter(it -> it.getStock() > 0)
+                    .filter(it -> query == null || query.isEmpty() ||
+                            areStringsContainsCommonWords(query, it.getDescription()))
+                    .sorted((it1, it2) ->
+                            compareByMatchingWordsNum(
+                                    it1.getDescription(),
+                                    it2.getDescription(),
+                                    query
+                            )
+                    )
                     .collect(Collectors.toList());
         } finally {
             lock.readLock().unlock();

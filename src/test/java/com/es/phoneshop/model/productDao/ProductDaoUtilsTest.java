@@ -1,11 +1,14 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model.productDao;
 
+import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.productSortEnums.SortField;
+import com.es.phoneshop.model.productSortEnums.SortOrder;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import static com.es.phoneshop.model.product.ProductDaoUtils.*;
+import static com.es.phoneshop.model.productDao.ProductDaoFindProductsUtils.*;
 import static org.junit.Assert.*;
 
 public class ProductDaoUtilsTest {

@@ -1,20 +1,25 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model.productDao;
 
-import org.junit.Before;
+import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.productSortEnums.SortField;
+import com.es.phoneshop.model.productSortEnums.SortOrder;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 
+import static com.es.phoneshop.model.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
 import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {
-    private ProductDao productDao;
+    private static ProductDao productDao;
 
-    @Before
-    public void setup() {
-        productDao = new ArrayListProductDao();
+    @BeforeClass
+    public static void setup() {
+        productDao = ArrayListProductDao.getInstance();
+        fillProductDaoDemoData(productDao);
     }
 
     @Test
@@ -41,7 +46,7 @@ public class ArrayListProductDaoTest {
 
         boolean isFoundedWithMatching = testProducts.stream()
                 .allMatch(it ->
-                        ProductDaoUtils.areStringsContainsCommonWords(it.getDescription(), "Samsung S"));
+                        ProductDaoFindProductsUtils.areStringsContainsCommonWords(it.getDescription(), "Samsung S"));
 
         assertFalse(haveNotProper);
         assertTrue(isFoundedWithMatching);
@@ -63,7 +68,7 @@ public class ArrayListProductDaoTest {
         boolean orderIsRight = true;
         Product prev = testProducts.get(0);
         for (int i = 1; i < testProducts.size(); ++i) {
-            if (prev.getDescription().compareTo(testProducts.get(i).getDescription()) >= 0) {
+            if (prev.getDescription().compareTo(testProducts.get(i).getDescription()) > 0) {
                 orderIsRight = false;
                 break;
             }
@@ -82,7 +87,7 @@ public class ArrayListProductDaoTest {
         boolean orderIsRight = true;
         Product prev = testProducts.get(0);
         for (int i = 1; i < testProducts.size(); ++i) {
-            if (prev.getPrice().compareTo(testProducts.get(i).getPrice()) >= 0) {
+            if (prev.getPrice().compareTo(testProducts.get(i).getPrice()) > 0) {
                 orderIsRight = false;
                 break;
             }
@@ -111,7 +116,7 @@ public class ArrayListProductDaoTest {
     public void save_ProductNullId() {
 
         Currency usd = Currency.getInstance("USD");
-        Product testProduct = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        Product testProduct = new Product("sgs987", "Samsung Galaxy S II iphone", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
 
         boolean isAdded = productDao.save(testProduct);
 
@@ -124,7 +129,7 @@ public class ArrayListProductDaoTest {
     public void save_ProductExistingId() {
 
         Currency usd = Currency.getInstance("USD");
-        Product testProduct = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        Product testProduct = new Product("sgs654", "Samsung Galaxy S III Apple", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
         testProduct.setId(1L);
 
         boolean isAdded = productDao.save(testProduct);
@@ -138,7 +143,7 @@ public class ArrayListProductDaoTest {
     public void save_ProductNotExistingId() {
 
         Currency usd = Currency.getInstance("USD");
-        Product testProduct = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        Product testProduct = new Product("sgs654", "Galaxy S Apple", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
         Long id = 1000L;
         testProduct.setId(id);
 
@@ -162,5 +167,10 @@ public class ArrayListProductDaoTest {
     public void delete_ProductNotExistingId() {
         Long id = 1000L;
         assertFalse(productDao.delete(id));
+    }
+
+    @Test
+    public void getInstance_returnOneInstance() {
+        assertSame(productDao, ArrayListProductDao.getInstance());
     }
 }

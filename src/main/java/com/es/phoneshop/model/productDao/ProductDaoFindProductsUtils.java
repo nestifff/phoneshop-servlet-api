@@ -1,11 +1,15 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model.productDao;
+
+import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.productSortEnums.SortField;
+import com.es.phoneshop.model.productSortEnums.SortOrder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ProductDaoUtils {
+public class ProductDaoFindProductsUtils {
 
     public static boolean areStringsContainsCommonWords(String query, String whereFind) {
 

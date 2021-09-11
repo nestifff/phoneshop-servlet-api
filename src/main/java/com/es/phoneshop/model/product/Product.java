@@ -8,9 +8,13 @@ public class Product {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
+    /**
+     * null means there is no price because the product is outdated or new
+     */
     private BigDecimal price;
-    /** can be null if the price is null */
+    /**
+     * can be null if the price is null
+     */
     private Currency currency;
     private int stock;
     private String imageUrl;
@@ -34,6 +38,10 @@ public class Product {
                 new PriceHistoryItem(LocalDate.now(), price, currency)
         );
         Collections.sort(this.priceHistory, Collections.reverseOrder());
+    }
+
+    public void addPriceHistory(PriceHistoryItem item) {
+        this.priceHistory.add(item);
     }
 
     public Long getId() {

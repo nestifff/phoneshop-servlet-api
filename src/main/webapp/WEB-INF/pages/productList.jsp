@@ -34,7 +34,9 @@
             ${product.description}
         </td>
         <td class="price">
-          <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+          <a href="${pageContext.servletContext.contextPath}/products/${product.id}?priceHistory=true">
+            <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+          </a>
         </td>
         <td>
           <a href="${pageContext.servletContext.contextPath}/products/${product.id}">Go to details</a>

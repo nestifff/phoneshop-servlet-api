@@ -1,4 +1,4 @@
-package com.es.phoneshop.web;
+package com.es.phoneshop.web.servlets;
 
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.productDao.ArrayListProductDao;
@@ -25,6 +25,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String productIdStr = request.getPathInfo();
+        String showPriseHistory = request.getParameter("priceHistory");
         Product product = null;
 
         if (productIdStr == null || productIdStr.length() <= 1) {
@@ -39,8 +40,11 @@ public class ProductDetailsPageServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/pages/errorProductNotFound.jsp").forward(request, response);
         } else {
             request.setAttribute("product", product);
-            request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
-
+            if (showPriseHistory == null) {
+                request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
+            } else if (Boolean.parseBoolean(showPriseHistory)) {
+                request.getRequestDispatcher("/WEB-INF/pages/priceHistory.jsp").forward(request, response);
+            }
         }
     }
 }

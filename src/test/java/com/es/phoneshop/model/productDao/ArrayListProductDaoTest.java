@@ -116,7 +116,7 @@ public class ArrayListProductDaoTest {
     public void save_ProductNullId() {
 
         Currency usd = Currency.getInstance("USD");
-        Product testProduct = new Product("sgs987", "Samsung Galaxy S II iphone", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        Product testProduct = new Product("sgs987", "Samsung Galaxy S II iphone", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
 
         boolean isAdded = productDao.save(testProduct);
 
@@ -129,7 +129,7 @@ public class ArrayListProductDaoTest {
     public void save_ProductExistingId() {
 
         Currency usd = Currency.getInstance("USD");
-        Product testProduct = new Product("sgs654", "Samsung Galaxy S III Apple", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        Product testProduct = new Product("sgs654", "Samsung Galaxy S III Apple", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
         testProduct.setId(1L);
 
         boolean isAdded = productDao.save(testProduct);
@@ -143,7 +143,7 @@ public class ArrayListProductDaoTest {
     public void save_ProductNotExistingId() {
 
         Currency usd = Currency.getInstance("USD");
-        Product testProduct = new Product("sgs654", "Galaxy S Apple", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg");
+        Product testProduct = new Product("sgs654", "Galaxy S Apple", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
         Long id = 1000L;
         testProduct.setId(id);
 

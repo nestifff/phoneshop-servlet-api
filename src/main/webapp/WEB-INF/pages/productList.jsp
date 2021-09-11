@@ -11,7 +11,6 @@
     <button>Search</button>
   </form>
   <table>
-    <thead>
       <tr>
         <td>Image</td>
         <td>Description
@@ -24,7 +23,6 @@
           <tags:sorting sort="price" order="desc"/>
         </td>
       </tr>
-    </thead>
     <c:forEach var="product" items="${products}">
       <tr>
         <td>

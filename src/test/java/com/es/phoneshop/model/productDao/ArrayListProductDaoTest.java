@@ -63,7 +63,7 @@ public class ArrayListProductDaoTest {
     @Test
     public void findProducts_returnWithSortDescription() {
 
-        List<Product> testProducts = productDao.findProducts("", SortField.description, SortOrder.asc);
+        List<Product> testProducts = productDao.findProducts("", SortField.DESCRIPTION, SortOrder.ASC);
 
         boolean orderIsRight = true;
         Product prev = testProducts.get(0);
@@ -82,7 +82,7 @@ public class ArrayListProductDaoTest {
 
         String query = "Samsung S";
 
-        List<Product> testProducts = productDao.findProducts(query, SortField.price, SortOrder.asc);
+        List<Product> testProducts = productDao.findProducts(query, SortField.PRICE, SortOrder.ASC);
 
         boolean orderIsRight = true;
         Product prev = testProducts.get(0);

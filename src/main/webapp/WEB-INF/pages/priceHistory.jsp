@@ -8,20 +8,19 @@
     <br>
     <h1>${product.description}</h1>
     <table>
-        <thead>
         <tr>
             <td>Date</td>
 
             <td>Price</td>
         </tr>
-        </thead>
         <c:forEach var="priceHistoryItem" items="${product.priceHistory}">
             <tr>
                 <td>
-                    ${priceHistoryItem.date.toString()}
+                        ${priceHistoryItem.date.toString()}
                 </td>
                 <td>
-                    <fmt:formatNumber value="${priceHistoryItem.price}" type="currency" currencySymbol="${priceHistoryItem.currency.symbol}"/>
+                    <fmt:formatNumber value="${priceHistoryItem.price}" type="currency"
+                                      currencySymbol="${priceHistoryItem.currency.symbol}"/>
                 </td>
             </tr>
         </c:forEach>

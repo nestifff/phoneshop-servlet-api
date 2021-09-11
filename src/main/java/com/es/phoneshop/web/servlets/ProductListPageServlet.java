@@ -19,7 +19,7 @@ public class ProductListPageServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        productDao =  ArrayListProductDao.getInstance();
+        productDao = ArrayListProductDao.getInstance();
     }
 
     @Override
@@ -31,8 +31,8 @@ public class ProductListPageServlet extends HttpServlet {
 
         request.setAttribute("products", productDao.findProducts(
                 query,
-                sortField == null ? null : SortField.valueOf(sortField),
-                sortOrder == null ? null : SortOrder.valueOf(sortOrder)
+                sortField == null ? null : SortField.valueOf(sortField.toUpperCase()),
+                sortOrder == null ? null : SortOrder.valueOf(sortOrder.toUpperCase())
         ));
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
     }

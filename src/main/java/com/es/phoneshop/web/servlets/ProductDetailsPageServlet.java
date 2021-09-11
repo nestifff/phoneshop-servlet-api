@@ -24,27 +24,33 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String productIdStr = request.getPathInfo();
-        String showPriseHistory = request.getParameter("priceHistory");
-        Product product = null;
+        try {
 
-        if (productIdStr == null || productIdStr.length() <= 1) {
-            productIdStr = "empty";
-        } else {
-            productIdStr = productIdStr.substring(1);
-            product = productDao.getProduct(Long.valueOf(productIdStr));
-        }
+            Long productId = Long.valueOf(request.getPathInfo().substring(1));
+            String showPriseHistory = request.getParameter("priceHistory");
+            Product product = productDao.getProduct(productId);
 
-        if (product == null) {
-            request.setAttribute("productId", productIdStr);
-            request.getRequestDispatcher("/WEB-INF/pages/errorProductNotFound.jsp").forward(request, response);
-        } else {
+            if (product == null) {
+                throw new RuntimeException("product not found");
+            }
+
             request.setAttribute("product", product);
             if (showPriseHistory == null) {
                 request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
-            } else if (Boolean.parseBoolean(showPriseHistory)) {
+            } else {
                 request.getRequestDispatcher("/WEB-INF/pages/priceHistory.jsp").forward(request, response);
             }
+
+        } catch (Exception ex) {
+
+            String idStr = request.getPathInfo();
+            if (idStr == null || idStr.length() <= 1) {
+                idStr = "empty";
+                request.setAttribute("productId", idStr);
+            } else {
+                request.setAttribute("productId", idStr.substring(1));
+            }
+            request.getRequestDispatcher("/WEB-INF/pages/errorProductNotFound.jsp").forward(request, response);
         }
     }
 }

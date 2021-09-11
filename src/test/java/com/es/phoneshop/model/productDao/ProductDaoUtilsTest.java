@@ -76,7 +76,7 @@ public class ProductDaoUtilsTest {
         Product product1 = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
         Product product2 = new Product("sgs2", "Samsung Galaxy S II", new BigDecimal(200), usd, 0, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
 
-        assertTrue(compareForSortingFieldOrder(product1, product2, SortField.description, SortOrder.asc) < 0);
+        assertTrue(compareForSortingFieldOrder(product1, product2, SortField.DESCRIPTION, SortOrder.ASC) < 0);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ProductDaoUtilsTest {
         Product product1 = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
         Product product2 = new Product("sgs2", "Samsung Galaxy S II", new BigDecimal(200), usd, 0, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
 
-        assertTrue(compareForSortingFieldOrder(product1, product2, SortField.price, SortOrder.desc) > 0);
+        assertTrue(compareForSortingFieldOrder(product1, product2, SortField.PRICE, SortOrder.DESC) > 0);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ProductDaoUtilsTest {
         Product product1 = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 100, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
         Product product2 = new Product("sgs2", "Samsung Galaxy S II", new BigDecimal(200), usd, 0, "https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/manufacturer/Samsung/Samsung%20Galaxy%20S.jpg", List.of());
 
-        assertEquals(0, compareForSortingFieldOrder(product1, product2, SortField.price, null));
+        assertEquals(0, compareForSortingFieldOrder(product1, product2, SortField.PRICE, null));
     }
 
 }

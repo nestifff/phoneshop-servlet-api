@@ -50,19 +50,19 @@ public class ProductDaoFindProductsUtils {
             return 0;
         }
 
-        if (sortField == SortField.description) {
+        if (sortField == SortField.DESCRIPTION) {
 
-            if (sortOrder == SortOrder.asc) {
+            if (sortOrder == SortOrder.ASC) {
                 return product1.getDescription().compareTo(product2.getDescription());
-            } else if (sortOrder == SortOrder.desc) {
+            } else if (sortOrder == SortOrder.DESC) {
                 return product2.getDescription().compareTo(product1.getDescription());
             }
 
-        } else if (sortField == SortField.price) {
+        } else if (sortField == SortField.PRICE) {
 
-            if (sortOrder == SortOrder.asc) {
+            if (sortOrder == SortOrder.ASC) {
                 return product1.getPrice().compareTo(product2.getPrice());
-            } else if (sortOrder == SortOrder.desc) {
+            } else if (sortOrder == SortOrder.DESC) {
                 return product2.getPrice().compareTo(product1.getPrice());
             }
         }

@@ -61,18 +61,9 @@ public class ArrayListProductDao implements ProductDao {
         lock.readLock().lock();
         try {
             return products.stream()
-                    .filter(it -> it.getPrice() != null)
-                    .filter(it -> it.getStock() > 0)
-                    .filter(it -> query == null || query.isEmpty() ||
-                            areStringsContainsCommonWords(query, it.getDescription()))
-                    .sorted((it1, it2) ->
-                            compareByMatchingWordsNum(
-                                    it1.getDescription(),
-                                    it2.getDescription(),
-                                    query
-                            )
-                    )
-                    .sorted((it1, it2) -> compareForSortingFieldOrder(it1, it2, sortField, sortOrder))
+                    .filter(it -> it.getPrice() != null && it.getStock() > 0)
+                    .filter(it -> needToAddThisProduct(query, it))
+                    .sorted((it1, it2) -> compare(it1, it2, sortField, sortOrder, query))
                     .collect(Collectors.toList());
         } finally {
             lock.readLock().unlock();

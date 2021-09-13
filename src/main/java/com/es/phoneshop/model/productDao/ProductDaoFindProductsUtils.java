@@ -11,16 +11,29 @@ import java.util.List;
 
 public class ProductDaoFindProductsUtils {
 
-    public static boolean areStringsContainsCommonWords(String query, String whereFind) {
+    public static boolean needToAddThisProduct(String query, Product product) {
 
-        if (query == null) {
-            return true;
-        }
+        return query == null ||
+                query.isEmpty() ||
+                areStringsContainsCommonWords(query, product.getDescription());
+    }
+
+
+    public static boolean areStringsContainsCommonWords(String query, String whereFind) {
 
         return !Collections.disjoint(
                 Arrays.asList(query.toLowerCase().split(" ")),
                 Arrays.asList(whereFind.toLowerCase().split(" "))
         );
+    }
+
+    public static int compare(Product product1, Product product2, SortField sortField, SortOrder sortOrder, String query) {
+
+        if (sortField == null || sortOrder == null) {
+            return compareByMatchingWordsNum(product1.getDescription(), product2.getDescription(), query);
+        } else {
+            return compareForSortingFieldOrder(product1, product2, sortField, sortOrder);
+        }
     }
 
     public static int compareByMatchingWordsNum(String whereSearch1, String whereSearch2, String whatSearch) {

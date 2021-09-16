@@ -18,10 +18,7 @@ public class Product {
     private Currency currency;
     private int stock;
     private String imageUrl;
-    private List<PriceHistoryItem> priceHistory;
-
-    public Product() {
-    }
+    private final List<PriceHistoryItem> priceHistory;
 
     public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceHistoryItem> priceHistory) {
 
@@ -37,11 +34,14 @@ public class Product {
         this.priceHistory.add(
                 new PriceHistoryItem(LocalDate.now(), price, currency)
         );
-        Collections.sort(this.priceHistory, Collections.reverseOrder());
+        this.priceHistory.sort(Collections.reverseOrder());
     }
 
     public void addPriceHistory(PriceHistoryItem item) {
-        this.priceHistory.add(item);
+        if (item != null) {
+            this.priceHistory.add(item);
+            priceHistory.sort(Collections.reverseOrder());
+        }
     }
 
     public Long getId() {
@@ -120,6 +120,6 @@ public class Product {
     }
 
     public List<PriceHistoryItem> getPriceHistory() {
-        return priceHistory;
+        return List.copyOf(priceHistory);
     }
 }

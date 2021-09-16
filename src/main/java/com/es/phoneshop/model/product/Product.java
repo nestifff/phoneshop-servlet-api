@@ -1,30 +1,47 @@
 package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Product {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
+    /**
+     * null means there is no price because the product is outdated or new
+     */
     private BigDecimal price;
-    /** can be null if the price is null */
+    /**
+     * can be null if the price is null
+     */
     private Currency currency;
     private int stock;
     private String imageUrl;
+    private final List<PriceHistoryItem> priceHistory;
 
-    public Product() {
-    }
+    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceHistoryItem> priceHistory) {
 
-    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
         this.code = code;
         this.description = description;
         this.price = price;
         this.currency = currency;
         this.stock = stock;
         this.imageUrl = imageUrl;
+
+        this.priceHistory = new ArrayList<>();
+        this.priceHistory.addAll(priceHistory);
+        this.priceHistory.add(
+                new PriceHistoryItem(LocalDate.now(), price, currency)
+        );
+        this.priceHistory.sort(Collections.reverseOrder());
+    }
+
+    public void addPriceHistory(PriceHistoryItem item) {
+        if (item != null) {
+            this.priceHistory.add(item);
+            priceHistory.sort(Collections.reverseOrder());
+        }
     }
 
     public Long getId() {
@@ -100,5 +117,9 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id, code, description, price, currency, stock, imageUrl);
+    }
+
+    public List<PriceHistoryItem> getPriceHistory() {
+        return List.copyOf(priceHistory);
     }
 }

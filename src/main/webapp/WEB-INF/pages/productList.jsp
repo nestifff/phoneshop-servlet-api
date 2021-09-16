@@ -5,25 +5,39 @@
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
-  <p>
-    Welcome to Expert-Soft training!
-  </p>
+  <br>
+  <form>
+    <input name="query" value="${param.query}">
+    <button>Search</button>
+  </form>
   <table>
-    <thead>
       <tr>
         <td>Image</td>
-        <td>Description</td>
-        <td class="price">Price</td>
+        <td>Description
+          <tags:sorting sort="description" order="asc"/>
+          <tags:sorting sort="description" order="desc"/>
+        </td>
+        <td class="price">
+          Price
+          <tags:sorting sort="price" order="asc"/>
+          <tags:sorting sort="price" order="desc"/>
+        </td>
       </tr>
-    </thead>
     <c:forEach var="product" items="${products}">
       <tr>
         <td>
           <img class="product-tile" src="${product.imageUrl}">
         </td>
-        <td>${product.description}</td>
+        <td>
+            ${product.description}
+        </td>
         <td class="price">
-          <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+          <a href="${pageContext.servletContext.contextPath}/products/${product.id}?priceHistory=true">
+            <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+          </a>
+        </td>
+        <td>
+          <a href="${pageContext.servletContext.contextPath}/products/${product.id}">Go to details</a>
         </td>
       </tr>
     </c:forEach>

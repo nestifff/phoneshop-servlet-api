@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.text.ParseException;
 
 public class ProductDetailsPageServlet extends HttpServlet {
 
@@ -44,7 +43,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
             }
 
             request.setAttribute("product", product);
-            request.setAttribute("cart", cartService.getCart());
+            request.setAttribute("cart", cartService.getCart(request));
 
             if (showPriseHistory == null) {
                 request.getRequestDispatcher("/WEB-INF/pages/productDetails.jsp").forward(request, response);
@@ -85,7 +84,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
         }
 
         try {
-            cartService.add(productId, quantity);
+            cartService.add(cartService.getCart(request), productId, quantity);
 
         } catch (ProductNotFoundInDaoException |
                 ProductStockLessThenRequiredException |

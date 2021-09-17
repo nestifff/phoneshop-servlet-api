@@ -41,7 +41,6 @@ public class ProductDetailsPageServletTest {
     @Test
     public void testDoGet() throws ServletException, IOException {
 
-
         servlet.doGet(request, response);
 
         verify(requestDispatcher).forward(request, response);
@@ -50,7 +49,6 @@ public class ProductDetailsPageServletTest {
 
     @Test
     public void testDoPost() throws ServletException, IOException {
-
 
         servlet.doPost(request, response);
 

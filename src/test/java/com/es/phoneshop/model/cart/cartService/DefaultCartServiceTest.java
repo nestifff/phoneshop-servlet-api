@@ -1,17 +1,17 @@
-package com.es.phoneshop.model.cartService;
+package com.es.phoneshop.model.cart.cartService;
 
-import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.model.cart.CartItem;
+import com.es.phoneshop.model.cart.domain.Cart;
+import com.es.phoneshop.model.cart.domain.CartItem;
 import com.es.phoneshop.model.exceptions.ProductNotFoundInDaoException;
 import com.es.phoneshop.model.exceptions.ProductStockLessThenRequiredException;
 import com.es.phoneshop.model.exceptions.QuantityLessThenZeroException;
-import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.productDao.ArrayListProductDao;
-import com.es.phoneshop.model.productDao.ProductDao;
+import com.es.phoneshop.model.product.domain.Product;
+import com.es.phoneshop.model.product.productDao.ArrayListProductDao;
+import com.es.phoneshop.model.product.productDao.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.es.phoneshop.model.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
+import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
 import static org.junit.Assert.*;
 
 public class DefaultCartServiceTest {

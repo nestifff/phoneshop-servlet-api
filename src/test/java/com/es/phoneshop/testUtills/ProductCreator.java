@@ -1,6 +1,6 @@
 package com.es.phoneshop.testUtills;
 
-import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.product.domain.Product;
 
 import java.math.BigDecimal;
 import java.util.Currency;

@@ -1,6 +1,6 @@
-package com.es.phoneshop.model.cartService;
+package com.es.phoneshop.model.cart.cartService;
 
-import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.cart.domain.Cart;
 import com.es.phoneshop.model.exceptions.ProductNotFoundInDaoException;
 import com.es.phoneshop.model.exceptions.ProductStockLessThenRequiredException;
 import com.es.phoneshop.model.exceptions.QuantityLessThenZeroException;

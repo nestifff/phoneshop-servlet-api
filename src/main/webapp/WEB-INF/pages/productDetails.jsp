@@ -3,16 +3,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<jsp:useBean id="product" type="com.es.phoneshop.model.product.Product" scope="request"/>
+<jsp:useBean id="product" type="com.es.phoneshop.model.product.domain.Product" scope="request"/>
 <tags:master pageTitle="Product Details">
     <h1>
             ${product.description}
     </h1>
 
 
-    <p>
-        Cart: ${cart}
-    </p>
+    <div>
+        ${cart}
+    </div>
     <c:if test="${not empty param.message and empty error}">
         <p style="color: green">
                 ${param.message}
@@ -20,7 +20,7 @@
     </c:if>
     <c:if test="${not empty error}">
         <p style="color: red">
-                There was an error adding to cart: ${error}
+            There was an error adding to cart: ${error}
         </p>
     </c:if>
 
@@ -58,5 +58,24 @@
             </div>
         </c:if>
     </form>
+
+    <br>
+    <h3>Recently viewed products:</h3>
+    <table style="table-layout: fixed;border-collapse: collapse;text-align: center;">
+        <tr>
+            <c:forEach var="product" items="${recentlyViewed}">
+                <td>
+                    <img class="product-tile" src="${product.imageUrl}">
+                    <p><a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a></p>
+                    <fmt:formatNumber value="${product.price}" type="currency"
+                                      currencySymbol="${product.currency.symbol}"/>
+
+                </td>
+            </c:forEach>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <br>
     <tags:home/>
 </tags:master>

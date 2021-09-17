@@ -1,12 +1,12 @@
 package com.es.phoneshop.web.listeners;
 
-import com.es.phoneshop.model.productDao.ArrayListProductDao;
-import com.es.phoneshop.model.productDao.ProductDao;
+import com.es.phoneshop.model.product.productDao.ArrayListProductDao;
+import com.es.phoneshop.model.product.productDao.ProductDao;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import static com.es.phoneshop.model.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
+import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
 
 public class DemoDataServletContextListener implements ServletContextListener {
 

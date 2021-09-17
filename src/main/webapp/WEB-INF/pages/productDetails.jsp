@@ -5,9 +5,25 @@
 
 <jsp:useBean id="product" type="com.es.phoneshop.model.product.Product" scope="request"/>
 <tags:master pageTitle="Product Details">
+    <h1>
+            ${product.description}
+    </h1>
+
+
     <p>
-        ${product.description}
+        Cart: ${cart}
     </p>
+    <c:if test="${not empty param.message and empty error}">
+        <p style="color: green">
+                ${param.message}
+        </p>
+    </c:if>
+    <c:if test="${not empty error}">
+        <p style="color: red">
+                There was an error adding to cart: ${error}
+        </p>
+    </c:if>
+
     <table>
         <tr>
             <td>Image</td>
@@ -25,11 +41,22 @@
             <td>Price</td>
             <td>
                 <a href="${pageContext.servletContext.contextPath}/products/${product.id}?priceHistory=true">
-                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
+                    <fmt:formatNumber value="${product.price}" type="currency"
+                                      currencySymbol="${product.currency.symbol}"/>
                 </a>
             </td>
         </tr>
     </table>
     <br>
+    <form method="post">
+        <p>Quantity: </p>
+        <input name="quantity" value="${not empty error ? param.quantity : 1}">
+        <button>Add to cart</button>
+        <c:if test="${not empty error}">
+            <div style="color: red">
+                    ${error}
+            </div>
+        </c:if>
+    </form>
     <tags:home/>
 </tags:master>

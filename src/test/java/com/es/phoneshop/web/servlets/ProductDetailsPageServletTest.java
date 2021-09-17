@@ -47,4 +47,14 @@ public class ProductDetailsPageServletTest {
         verify(requestDispatcher).forward(request, response);
         verify(request).setAttribute(eq("productId"), anyString());
     }
+
+    @Test
+    public void testDoPost() throws ServletException, IOException {
+
+
+        servlet.doPost(request, response);
+
+        verify(requestDispatcher).forward(request, response);
+        verify(request).setAttribute(eq("error"), anyString());
+    }
 }

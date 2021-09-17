@@ -33,7 +33,7 @@
   </servlet-mapping>
 
   <error-page>
-    <location>/WEB-INF/pages/error.jsp</location>
+    <location>/WEB-INF/pages/error_code500.jsp</location>
     <error-code>500</error-code>
   </error-page>
 

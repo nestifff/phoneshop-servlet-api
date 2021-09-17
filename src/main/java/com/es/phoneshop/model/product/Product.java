@@ -119,6 +119,11 @@ public class Product {
         return Objects.hash(id, code, description, price, currency, stock, imageUrl);
     }
 
+    @Override
+    public String toString() {
+        return description + ", price: " + price.toString();
+    }
+
     public List<PriceHistoryItem> getPriceHistory() {
         return List.copyOf(priceHistory);
     }

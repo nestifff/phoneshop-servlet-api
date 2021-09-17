@@ -25,7 +25,7 @@ public class ArrayListProductDao implements ProductDao {
         lock = new ReentrantReadWriteLock();
     }
 
-    public static synchronized ProductDao getInstance() {
+    public static ProductDao getInstance() {
 
         if (instance == null) {
             synchronized (ArrayListProductDao.class) {

@@ -46,3 +46,8 @@ img.product-tile {
 .greenText {
     color: green;
 }
+
+.inputQuantity {
+    max-width: 64px;
+    text-align: right;
+}

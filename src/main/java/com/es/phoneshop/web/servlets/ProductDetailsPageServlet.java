@@ -2,9 +2,6 @@ package com.es.phoneshop.web.servlets;
 
 import com.es.phoneshop.model.cart.cartService.CartService;
 import com.es.phoneshop.model.cart.cartService.DefaultCartService;
-import com.es.phoneshop.model.exceptions.ProductNotFoundInDaoException;
-import com.es.phoneshop.model.exceptions.ProductStockLessThenRequiredException;
-import com.es.phoneshop.model.exceptions.QuantityLessThenZeroException;
 import com.es.phoneshop.model.product.domain.Product;
 import com.es.phoneshop.model.product.productDao.ArrayListProductDao;
 import com.es.phoneshop.model.product.productDao.ProductDao;
@@ -17,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.ParseException;
 
 import static com.es.phoneshop.model.product.recentlyViewed.RecentlyViewedProducts.createRVProductsForSession;
 
@@ -87,23 +85,14 @@ public class ProductDetailsPageServlet extends HttpServlet {
             NumberFormat format = NumberFormat.getInstance(request.getLocale());
             quantity = format.parse(quantityStr).intValue();
 
-        } catch (Exception ex) {
-            request.setAttribute("error", "Not not a number");
-            doGet(request, response);
-            return;
-        }
-
-        try {
             cartService.add(cartService.getCart(request), productId, quantity);
 
-        } catch (ProductNotFoundInDaoException |
-                ProductStockLessThenRequiredException |
-                QuantityLessThenZeroException ex
-        ) {
+        } catch (ParseException | IllegalArgumentException | NullPointerException ex) {
             request.setAttribute("error", ex.getMessage());
             doGet(request, response);
             return;
         }
+
         response.sendRedirect(request.getContextPath() + "/products/" + productId + "?message=Product added to cart");
     }
 

@@ -50,7 +50,7 @@
     <br>
     <form method="post">
         <p>Quantity: </p>
-        <input name="quantity" value="${not empty error ? param.quantity : 1}">
+        <input class="inputQuantity" name="quantity" value="${not empty error ? param.quantity : 1}">
         <button>Add to cart</button>
         <c:if test="${not empty error}">
             <div class="redText">

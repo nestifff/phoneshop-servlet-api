@@ -10,9 +10,12 @@ public class CartItem implements Serializable {
     private final Product product;
     private int quantity;
 
-    public CartItem(Product product, int quantity) {
+    public CartItem(Product product) {
         this.product = product;
-        this.quantity = quantity;
+    }
+
+    public int getCost() {
+        return quantity * product.getPrice().intValue();
     }
 
     public Product getProduct() {
@@ -23,12 +26,9 @@ public class CartItem implements Serializable {
         return quantity;
     }
 
-    public void increaseQuantity(int incr) {
-        this.quantity += incr;
-    }
-
-    public void decreaseQuantity(int decr) {
-        this.quantity -= decr;
+    public void setQuantity(int newQuantity) {
+        product.setStock(product.getStock() + quantity - newQuantity);
+        quantity = newQuantity;
     }
 
     @Override
@@ -44,12 +44,11 @@ public class CartItem implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem cartItem = (CartItem) o;
-        return quantity == cartItem.quantity &&
-                Objects.equals(product, cartItem.product);
+        return product.equals(cartItem.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(product, quantity);
+        return Objects.hash(product);
     }
 }

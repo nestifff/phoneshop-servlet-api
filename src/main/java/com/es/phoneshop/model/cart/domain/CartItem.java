@@ -51,4 +51,6 @@ public class CartItem implements Serializable {
     public int hashCode() {
         return Objects.hash(product);
     }
+
+
 }

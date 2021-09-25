@@ -25,6 +25,12 @@ public class Cart implements Serializable {
         totalCost += newQuantity * item.getProduct().getPrice().intValue();
     }
 
+    public void deleteItem(CartItem item) {
+        totalCost -= item.getCost();
+        item.setQuantity(0);
+        items.remove(item);
+    }
+
     public CartItem getItem(Long productId) {
         return items.stream()
                 .filter(item -> productId.equals(item.getProduct().getId()))

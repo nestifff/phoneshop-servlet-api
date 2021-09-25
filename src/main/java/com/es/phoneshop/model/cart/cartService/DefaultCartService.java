@@ -90,6 +90,12 @@ public class DefaultCartService implements CartService {
         }
     }
 
+    @Override
+    public void delete(Cart cart, Long productId) {
+        CartItem item = cart.getItem(productId);
+        cart.deleteItem(item);
+    }
+
     private void checkStockEnough(Product product, int quantityToAdd) {
         if (product.getStock() < quantityToAdd) {
             throw new IllegalArgumentException("Stock: " + product.getStock() + " is less then required: " + quantityToAdd);

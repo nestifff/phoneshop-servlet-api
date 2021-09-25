@@ -51,6 +51,12 @@
                             </c:if>
                             <input type="hidden" value="${item.product.id}" name="productId">
                         </td>
+                        <td>
+                            <button form="deleteCartItem"
+                                    formaction="${pageContext.servletContext.contextPath}/cart/deleteCartItem/${item.product.id}">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>
@@ -58,6 +64,8 @@
                 <button>Update cart</button>
             </p>
         </form>
+
+        <form id="deleteCartItem" method="post"></form>
 
         <h4>Total cost: ${cart.totalCost}</h4>
         <br>

@@ -8,8 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class DefaultCartServiceTest {
 
@@ -80,7 +79,7 @@ public class DefaultCartServiceTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void add_thenUpdate_outOfStock() {
+    public void update_outOfStock() {
         Long id = 1L;
 
         cartService.add(cart, id, 2);
@@ -88,7 +87,7 @@ public class DefaultCartServiceTest {
     }
 
     @Test
-    public void add_thenUpdate_decreaseQuantity() {
+    public void update_decreaseQuantity() {
 
         Long id = 1L;
         Product product = productDao.getProduct(id);
@@ -104,7 +103,7 @@ public class DefaultCartServiceTest {
     }
 
     @Test
-    public void add_thenUpdate_notChangeQuantity() {
+    public void update_notChangeQuantity() {
 
         Long id = 1L;
         Product product = productDao.getProduct(id);
@@ -120,11 +119,24 @@ public class DefaultCartServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void add_thenUpdate_illegalQuantity() {
+    public void update_illegalQuantity() {
         Long id = 1L;
 
         cartService.add(cart, id, 5);
         cartService.update(cart, id, -4);
+    }
+
+    @Test
+    public void delete_allRight() {
+        Long id = 1L;
+        Product product = productDao.getProduct(id);
+        int startStock = product.getStock();
+        cartService.add(cart, id, 5);
+        cartService.delete(cart, id);
+
+        assertTrue(cart.getItems().isEmpty());
+        assertEquals(product.getStock(), startStock);
+        assertEquals(cart.getTotalCost(), 0);
     }
 
 }

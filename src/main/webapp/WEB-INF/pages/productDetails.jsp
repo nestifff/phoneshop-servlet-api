@@ -9,10 +9,6 @@
             ${product.description}
     </h1>
 
-
-    <div>
-        ${cart}
-    </div>
     <c:if test="${not empty param.message and empty error}">
         <p class="greenText">
                 ${param.message}

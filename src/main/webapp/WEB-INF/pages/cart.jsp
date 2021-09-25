@@ -67,7 +67,13 @@
 
         <form id="deleteCartItem" method="post"></form>
 
-        <h4>Total cost: ${cart.totalCost}</h4>
+        <c:if test="${not empty cart.items}">
+            <h4>Total cost: <fmt:formatNumber value="${cart.totalCost}" type="currency"
+                                              currencySymbol="${cart.items[0].product.currency.symbol}"/></h4>
+        </c:if>
+        <c:if test="${not empty cart.items}">
+            <h4>Total number of products: ${cart.totalQuantity}</h4>
+        </c:if>
         <br>
     </c:if>
 

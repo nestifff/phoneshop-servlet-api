@@ -3,6 +3,7 @@ package com.es.phoneshop.model.cart.domain;
 import com.es.phoneshop.model.product.domain.Product;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class CartItem implements Serializable {
@@ -10,12 +11,13 @@ public class CartItem implements Serializable {
     private final Product product;
     private int quantity;
 
-    public CartItem(Product product) {
+    public CartItem(Product product, int quantity) {
         this.product = product;
+        this.quantity = quantity;
     }
 
-    public int getCost() {
-        return quantity * product.getPrice().intValue();
+    public BigDecimal getCost() {
+        return BigDecimal.valueOf(quantity * product.getPrice().intValue());
     }
 
     public Product getProduct() {
@@ -27,7 +29,6 @@ public class CartItem implements Serializable {
     }
 
     public void setQuantity(int newQuantity) {
-        product.setStock(product.getStock() + quantity - newQuantity);
         quantity = newQuantity;
     }
 

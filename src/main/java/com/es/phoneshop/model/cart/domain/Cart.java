@@ -1,49 +1,39 @@
 package com.es.phoneshop.model.cart.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cart implements Serializable {
 
     private final List<CartItem> items;
-    private int totalCost = 0;
+    private BigDecimal totalCost;
+    private int totalQuantity;
 
     public Cart() {
         this.items = new ArrayList<>();
-    }
-
-    public void addNewItem(CartItem item, int quantity) {
-        item.setQuantity(quantity);
-        items.add(item);
-        totalCost += item.getCost();
-    }
-
-    public void changeItemQuantity(CartItem item, int newQuantity) {
-        totalCost -= item.getCost();
-        item.setQuantity(newQuantity);
-        totalCost += newQuantity * item.getProduct().getPrice().intValue();
-    }
-
-    public void deleteItem(CartItem item) {
-        totalCost -= item.getCost();
-        item.setQuantity(0);
-        items.remove(item);
-    }
-
-    public CartItem getItem(Long productId) {
-        return items.stream()
-                .filter(item -> productId.equals(item.getProduct().getId()))
-                .findAny()
-                .orElse(null);
+        totalCost = new BigDecimal(0);
     }
 
     public List<CartItem> getItems() {
-        return List.copyOf(items);
+        return items;
     }
 
-    public int getTotalCost() {
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public BigDecimal getTotalCost() {
         return totalCost;
+    }
+
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
     }
 
     @Override
@@ -60,5 +50,6 @@ public class Cart implements Serializable {
         sb.append("<br>Total cost: " + totalCost);
         return sb.toString();
     }
+
 
 }

@@ -7,6 +7,8 @@ import com.es.phoneshop.model.product.productDao.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
 import static org.junit.Assert.*;
 
@@ -30,7 +32,7 @@ public class DefaultCartServiceTest {
     }
 
     @Test
-    public void add_allRight(){
+    public void add_allRight() {
 
         Long id = 3L;
         Product product = productDao.getProduct(id);
@@ -38,18 +40,26 @@ public class DefaultCartServiceTest {
         cartService.add(cart, id, stock - 1);
 
         assertEquals(1, product.getStock());
-        assertEquals(cart.getItem(id).getQuantity(), stock - 1);
+        assertEquals(
+                stock - 1,
+                cart.getItems().stream()
+                        .filter(item -> id.equals(item.getProduct().getId()))
+                        .findAny()
+                        .orElse(null).getQuantity()
+
+        );
+        assertEquals(stock - 1, cart.getTotalQuantity());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void add_stockLessThenRequired(){
+    public void add_stockLessThenRequired() {
 
         Long id = 1L;
         cartService.add(cart, id, 2000000);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void add_productNotExist()  {
+    public void add_productNotExist() {
 
         Long id = 1000000L;
         cartService.add(cart, id, 2);
@@ -59,22 +69,6 @@ public class DefaultCartServiceTest {
     public void add_lessThenZero() {
 
         cartService.add(cart, 1L, -2);
-    }
-
-    @Test
-    public void add_thenUpdate() {
-
-        Long id = 1L;
-        Product product = productDao.getProduct(id);
-        int stock = product.getStock();
-        cartService.add(cart, id, 2);
-        cartService.add(cart, id, 3);
-
-        int totalCost = product.getPrice().intValue() * 5;
-
-        assertEquals(stock - 5, product.getStock());
-        assertEquals(cart.getTotalCost(), totalCost);
-        assertEquals(5, cart.getItem(id).getQuantity());
     }
 
 
@@ -95,12 +89,42 @@ public class DefaultCartServiceTest {
         cartService.add(cart, id, 5);
         cartService.update(cart, id, 3);
 
-        int totalCost = product.getPrice().intValue() * 3;
+        BigDecimal totalCost = BigDecimal.valueOf(product.getPrice().intValue() * 3);
 
         assertEquals(stock - 3, product.getStock());
         assertEquals(cart.getTotalCost(), totalCost);
-        assertEquals(3, cart.getItem(id).getQuantity());
+        assertEquals(
+                3,
+                cart.getItems().stream()
+                        .filter(item -> id.equals(item.getProduct().getId()))
+                        .findAny()
+                        .orElse(null).getQuantity()
+        );
+        assertEquals(3, cart.getTotalQuantity());
     }
+
+    @Test
+    public void update_increaseQuantity() {
+
+        Long id = 1L;
+        Product product = productDao.getProduct(id);
+        int stock = product.getStock();
+        cartService.add(cart, id, 5);
+        cartService.update(cart, id, 6);
+
+        BigDecimal totalCost = BigDecimal.valueOf(product.getPrice().intValue() * 6);
+
+        assertEquals(stock - 6, product.getStock());
+        assertEquals(cart.getTotalCost(), totalCost);
+        assertEquals(6,
+                cart.getItems().stream()
+                        .filter(item -> id.equals(item.getProduct().getId()))
+                        .findAny()
+                        .orElse(null).getQuantity()
+        );
+        assertEquals(6, cart.getTotalQuantity());
+    }
+
 
     @Test
     public void update_notChangeQuantity() {
@@ -111,11 +135,37 @@ public class DefaultCartServiceTest {
         cartService.add(cart, id, 5);
         cartService.update(cart, id, 5);
 
-        int totalCost = product.getPrice().intValue() * 5;
+        BigDecimal totalCost = BigDecimal.valueOf(product.getPrice().intValue() * 5);
 
         assertEquals(stock - 5, product.getStock());
         assertEquals(cart.getTotalCost(), totalCost);
-        assertEquals(5, cart.getItem(id).getQuantity());
+        assertEquals(5,
+                cart.getItems().stream()
+                        .filter(item -> id.equals(item.getProduct().getId()))
+                        .findAny()
+                        .orElse(null).getQuantity()
+        );
+        assertEquals(5, cart.getTotalQuantity());
+    }
+
+    @Test
+    public void AddUpdate_severalAllRight() {
+
+        Long id1 = 1L;
+        Product product1 = productDao.getProduct(id1);
+
+        Long id2 = 5L;
+        Product product2 = productDao.getProduct(id2);
+
+        cartService.add(cart, id1, 2);
+        cartService.add(cart, id1, 3);
+        cartService.add(cart, id2, 3);
+
+        BigDecimal totalCost = BigDecimal.valueOf(product1.getPrice().intValue() * 5 + product2.getPrice().intValue() * 3);
+
+        assertEquals(cart.getTotalCost(), totalCost);
+        assertEquals(cart.getItems().size(), 2);
+        assertEquals(8, cart.getTotalQuantity());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -136,7 +186,8 @@ public class DefaultCartServiceTest {
 
         assertTrue(cart.getItems().isEmpty());
         assertEquals(product.getStock(), startStock);
-        assertEquals(cart.getTotalCost(), 0);
+        assertEquals(cart.getTotalCost(), BigDecimal.valueOf(0));
+        assertEquals(0, cart.getTotalQuantity());
     }
 
 }

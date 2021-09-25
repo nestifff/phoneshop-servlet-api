@@ -51,3 +51,13 @@ img.product-tile {
     max-width: 64px;
     text-align: right;
 }
+
+.miniCart {
+    position: absolute;
+    right: 0;
+    font-family: Arial;
+    font-size: large;
+    font-style: oblique;
+    margin-top: 20px;
+    margin-right: 32px
+}

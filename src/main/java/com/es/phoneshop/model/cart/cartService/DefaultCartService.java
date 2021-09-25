@@ -7,6 +7,7 @@ import com.es.phoneshop.model.product.productDao.ArrayListProductDao;
 import com.es.phoneshop.model.product.productDao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 
 public class DefaultCartService implements CartService {
 
@@ -56,7 +57,10 @@ public class DefaultCartService implements CartService {
                 throw new IllegalArgumentException("Product not exist");
             }
 
-            CartItem presentItem = cart.getItem(productId);
+            CartItem presentItem = cart.getItems().stream()
+                    .filter(item -> productId.equals(item.getProduct().getId()))
+                    .findAny()
+                    .orElse(null);
 
             if (presentItem != null) {
                 update(cart, productId, presentItem.getQuantity() + newQuantity);
@@ -64,7 +68,12 @@ public class DefaultCartService implements CartService {
             } else {
                 checkPositive(newQuantity);
                 checkStockEnough(product, newQuantity);
-                cart.addNewItem(new CartItem(product), newQuantity);
+
+                CartItem newItem = new CartItem(product, newQuantity);
+                cart.getItems().add(newItem);
+                product.setStock(product.getStock() - newQuantity);
+
+                recalculateCart(cart);
             }
         }
     }
@@ -76,7 +85,10 @@ public class DefaultCartService implements CartService {
             checkPositive(newQuantity);
 
             Product product = productDao.getProduct(productId);
-            CartItem presentItem = cart.getItem(productId);
+            CartItem presentItem = cart.getItems().stream()
+                    .filter(item -> productId.equals(item.getProduct().getId()))
+                    .findAny()
+                    .orElse(null);
 
             int oldQuality = presentItem.getQuantity();
             if (oldQuality == newQuantity) {
@@ -86,14 +98,35 @@ public class DefaultCartService implements CartService {
                 checkStockEnough(product, newQuantity - oldQuality);
             }
 
-            cart.changeItemQuantity(presentItem, newQuantity);
+            product.setStock(product.getStock() - (newQuantity - oldQuality));
+            presentItem.setQuantity(newQuantity);
+
+            recalculateCart(cart);
         }
     }
 
     @Override
     public void delete(Cart cart, Long productId) {
-        CartItem item = cart.getItem(productId);
-        cart.deleteItem(item);
+        CartItem itemToDelete = cart.getItems().stream()
+                .filter(item -> productId.equals(item.getProduct().getId()))
+                .findAny()
+                .orElse(null);
+
+        itemToDelete.getProduct().setStock(itemToDelete.getProduct().getStock() + itemToDelete.getQuantity());
+        cart.getItems().remove(itemToDelete);
+
+        recalculateCart(cart);
+    }
+
+    private void recalculateCart(Cart cart) {
+        BigDecimal totalCost = new BigDecimal(0);
+        int totalQuantity = 0;
+        for (CartItem item: cart.getItems()) {
+            totalQuantity += item.getQuantity();
+            totalCost = totalCost.add(item.getCost());
+        }
+        cart.setTotalQuantity(totalQuantity);
+        cart.setTotalCost(totalCost);
     }
 
     private void checkStockEnough(Product product, int quantityToAdd) {

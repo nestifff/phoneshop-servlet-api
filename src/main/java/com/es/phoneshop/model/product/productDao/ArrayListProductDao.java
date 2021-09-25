@@ -1,8 +1,8 @@
-package com.es.phoneshop.model.productDao;
+package com.es.phoneshop.model.product.productDao;
 
-import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.productSortEnums.SortField;
-import com.es.phoneshop.model.productSortEnums.SortOrder;
+import com.es.phoneshop.model.product.domain.Product;
+import com.es.phoneshop.model.product.productSortEnums.SortField;
+import com.es.phoneshop.model.product.productSortEnums.SortOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
-import static com.es.phoneshop.model.productDao.ProductDaoFindProductsUtils.*;
+import static com.es.phoneshop.model.product.productDao.ProductDaoFindProductsUtils.*;
 
 public class ArrayListProductDao implements ProductDao {
 
@@ -25,7 +25,7 @@ public class ArrayListProductDao implements ProductDao {
         lock = new ReentrantReadWriteLock();
     }
 
-    public static synchronized ProductDao getInstance() {
+    public static ProductDao getInstance() {
 
         if (instance == null) {
             synchronized (ArrayListProductDao.class) {

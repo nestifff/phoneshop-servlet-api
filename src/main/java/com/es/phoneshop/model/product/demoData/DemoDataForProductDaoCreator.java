@@ -1,8 +1,8 @@
-package com.es.phoneshop.model.demoData;
+package com.es.phoneshop.model.product.demoData;
 
-import com.es.phoneshop.model.product.PriceHistoryItem;
-import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.productDao.ProductDao;
+import com.es.phoneshop.model.product.domain.PriceHistoryItem;
+import com.es.phoneshop.model.product.domain.Product;
+import com.es.phoneshop.model.product.productDao.ProductDao;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -42,4 +42,22 @@
       </tr>
     </c:forEach>
   </table>
+  <br>
+  <h3>Recently viewed products:</h3>
+  <table class="recentlyViewedTable">
+    <tr>
+      <c:forEach var="product" items="${recentlyViewed}">
+        <td>
+          <img class="product-tile" src="${product.imageUrl}">
+          <p><a href="${pageContext.servletContext.contextPath}/products/${product.id}">${product.description}</a></p>
+          <fmt:formatNumber value="${product.price}" type="currency"
+                            currencySymbol="${product.currency.symbol}"/>
+
+        </td>
+      </c:forEach>
+    </tr>
+  </table>
+  <br>
+  <br>
+  <br>
 </tags:master>

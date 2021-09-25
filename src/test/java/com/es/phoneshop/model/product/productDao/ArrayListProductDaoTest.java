@@ -1,8 +1,8 @@
-package com.es.phoneshop.model.productDao;
+package com.es.phoneshop.model.product.productDao;
 
-import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.productSortEnums.SortField;
-import com.es.phoneshop.model.productSortEnums.SortOrder;
+import com.es.phoneshop.model.product.domain.Product;
+import com.es.phoneshop.model.product.productSortEnums.SortField;
+import com.es.phoneshop.model.product.productSortEnums.SortOrder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 
-import static com.es.phoneshop.model.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
+import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
 import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {

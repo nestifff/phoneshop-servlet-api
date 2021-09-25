@@ -1,4 +1,4 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.model.product.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -117,6 +117,11 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id, code, description, price, currency, stock, imageUrl);
+    }
+
+    @Override
+    public String toString() {
+        return description + ", price: " + price.toString();
     }
 
     public List<PriceHistoryItem> getPriceHistory() {

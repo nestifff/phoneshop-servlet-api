@@ -3,7 +3,7 @@ package com.es.phoneshop.model.product.productDao;
 import com.es.phoneshop.model.product.domain.Product;
 import com.es.phoneshop.model.product.productSortEnums.SortField;
 import com.es.phoneshop.model.product.productSortEnums.SortOrder;
-import com.es.phoneshop.testUtills.ProductCreator;
+import com.es.phoneshop.testUtils.ProductCreator;
 import org.junit.Test;
 
 import java.math.BigDecimal;

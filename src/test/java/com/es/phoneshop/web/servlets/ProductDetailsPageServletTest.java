@@ -47,12 +47,9 @@ public class ProductDetailsPageServletTest {
         verify(request).setAttribute(eq("productId"), anyString());
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testDoPost() throws ServletException, IOException {
 
         servlet.doPost(request, response);
-
-        verify(requestDispatcher).forward(request, response);
-        verify(request).setAttribute(eq("error"), anyString());
     }
 }

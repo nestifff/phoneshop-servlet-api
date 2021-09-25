@@ -10,6 +10,7 @@ import java.util.List;
 public class RecentlyViewedProducts {
 
     public static final String VIEWED_PRODUCTS_SESSION_ATTRIBUTE = RecentlyViewedProducts.class.getName() + "object for certain session";
+    private static final int MAX_NUM_RECENTLY_VIEWED_PRODUCTS = 3;
 
     private final Deque<Product> recentlyViewed;
 
@@ -33,7 +34,7 @@ public class RecentlyViewedProducts {
         if (!recentlyViewed.contains(product)) {
 
             recentlyViewed.addFirst(product);
-            if (recentlyViewed.size() > 3) {
+            if (recentlyViewed.size() > MAX_NUM_RECENTLY_VIEWED_PRODUCTS) {
                 recentlyViewed.removeLast();
             }
 

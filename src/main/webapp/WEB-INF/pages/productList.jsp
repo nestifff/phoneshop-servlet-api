@@ -44,7 +44,7 @@
   </table>
   <br>
   <h3>Recently viewed products:</h3>
-  <table style="table-layout: fixed;border-collapse: collapse;text-align: center;">
+  <table class="recentlyViewedTable">
     <tr>
       <c:forEach var="product" items="${recentlyViewed}">
         <td>

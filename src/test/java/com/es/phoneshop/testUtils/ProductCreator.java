@@ -1,4 +1,4 @@
-package com.es.phoneshop.testUtills;
+package com.es.phoneshop.testUtils;
 
 import com.es.phoneshop.model.product.domain.Product;
 

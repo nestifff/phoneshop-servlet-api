@@ -14,12 +14,12 @@
         ${cart}
     </div>
     <c:if test="${not empty param.message and empty error}">
-        <p style="color: green">
+        <p class="greenText">
                 ${param.message}
         </p>
     </c:if>
     <c:if test="${not empty error}">
-        <p style="color: red">
+        <p class="redText">
             There was an error adding to cart: ${error}
         </p>
     </c:if>
@@ -53,7 +53,7 @@
         <input name="quantity" value="${not empty error ? param.quantity : 1}">
         <button>Add to cart</button>
         <c:if test="${not empty error}">
-            <div style="color: red">
+            <div class="redText">
                     ${error}
             </div>
         </c:if>
@@ -61,7 +61,7 @@
 
     <br>
     <h3>Recently viewed products:</h3>
-    <table style="table-layout: fixed;border-collapse: collapse;text-align: center;">
+    <table class="recentlyViewedTable">
         <tr>
             <c:forEach var="product" items="${recentlyViewed}">
                 <td>

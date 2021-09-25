@@ -1,10 +1,11 @@
 package com.es.phoneshop.model.product.domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
-public class Product {
+public class Product implements Serializable {
     private Long id;
     private String code;
     private String description;

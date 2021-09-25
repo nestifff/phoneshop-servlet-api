@@ -68,9 +68,9 @@ public class DefaultCartService implements CartService {
 
             CartItem presentItem = cart.getItems().stream().filter(it -> product.equals(it.getProduct())).findAny().orElse(null);
             if (presentItem != null) {
-                presentItem.increaseQuantity(quantity);
+                cart.increaseItemQuantity(presentItem, quantity);
             } else {
-                cart.getItems().add(new CartItem(product, quantity));
+                cart.addItem(new CartItem(product, quantity));
             }
             product.setStock(product.getStock() - quantity);
         }

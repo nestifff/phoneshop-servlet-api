@@ -2,9 +2,10 @@ package com.es.phoneshop.model.cart.domain;
 
 import com.es.phoneshop.model.product.domain.Product;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class CartItem {
+public class CartItem implements Serializable {
 
     private final Product product;
     private int quantity;

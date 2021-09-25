@@ -3,11 +3,12 @@ package com.es.phoneshop.model.product.recentlyViewed;
 import com.es.phoneshop.model.product.domain.Product;
 
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RecentlyViewedProducts {
+public class RecentlyViewedProducts implements Serializable {
 
     public static final String VIEWED_PRODUCTS_SESSION_ATTRIBUTE = RecentlyViewedProducts.class.getName() + "object for certain session";
     private static final int MAX_NUM_RECENTLY_VIEWED_PRODUCTS = 3;

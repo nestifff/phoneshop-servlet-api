@@ -54,7 +54,10 @@ public class DefaultCartServiceTest {
         cartService.add(cart, id, 2);
         cartService.add(cart, id, 3);
 
+        int totalCost = product.getPrice().intValue() * 5;
+
         assertEquals(stock - 5, product.getStock());
+        assertEquals(cart.getTotalCost(), totalCost);
         assertTrue(cart.getItems().contains(new CartItem(product, 5)));
     }
 

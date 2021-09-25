@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class DeleteCartItemServlet  extends HttpServlet {
+public class DeleteCartItemServlet extends HttpServlet {
 
     private CartService cartService;
 

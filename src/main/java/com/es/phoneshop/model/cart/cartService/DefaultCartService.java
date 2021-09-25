@@ -121,7 +121,7 @@ public class DefaultCartService implements CartService {
     private void recalculateCart(Cart cart) {
         BigDecimal totalCost = new BigDecimal(0);
         int totalQuantity = 0;
-        for (CartItem item: cart.getItems()) {
+        for (CartItem item : cart.getItems()) {
             totalQuantity += item.getQuantity();
             totalCost = totalCost.add(item.getCost());
         }

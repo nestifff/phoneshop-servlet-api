@@ -112,19 +112,25 @@ public class DefaultCartService implements CartService {
                 .findAny()
                 .orElse(null);
 
-        itemToDelete.getProduct().setStock(itemToDelete.getProduct().getStock() + itemToDelete.getQuantity());
-        cart.getItems().remove(itemToDelete);
+        if (itemToDelete != null) {
 
-        recalculateCart(cart);
+            itemToDelete.getProduct().setStock(itemToDelete.getProduct().getStock() + itemToDelete.getQuantity());
+            cart.getItems().remove(itemToDelete);
+
+            recalculateCart(cart);
+        }
     }
 
     private void recalculateCart(Cart cart) {
-        BigDecimal totalCost = new BigDecimal(0);
-        int totalQuantity = 0;
-        for (CartItem item : cart.getItems()) {
-            totalQuantity += item.getQuantity();
-            totalCost = totalCost.add(item.getCost());
-        }
+
+        int totalQuantity = cart.getItems().stream()
+                .map(CartItem::getQuantity)
+                .reduce(0, Integer::sum);
+
+        BigDecimal totalCost = cart.getItems().stream()
+                .map(CartItem::getCost)
+                .reduce(new BigDecimal(0), BigDecimal::add);
+
         cart.setTotalQuantity(totalQuantity);
         cart.setTotalCost(totalCost);
     }

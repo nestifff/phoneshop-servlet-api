@@ -3,8 +3,6 @@ package com.es.phoneshop.web.servlets;
 import com.es.phoneshop.model.cart.cartService.CartService;
 import com.es.phoneshop.model.cart.cartService.DefaultCartService;
 import com.es.phoneshop.model.cart.domain.Cart;
-import com.es.phoneshop.model.product.productDao.ArrayListProductDao;
-import com.es.phoneshop.model.product.productDao.ProductDao;
 import com.es.phoneshop.model.product.recentlyViewed.RecentlyViewedProducts;
 
 import javax.servlet.ServletConfig;
@@ -22,13 +20,11 @@ import static com.es.phoneshop.model.product.recentlyViewed.RecentlyViewedProduc
 
 public class CartPageServlet extends HttpServlet {
 
-    private ProductDao productDao;
     private CartService cartService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        productDao = ArrayListProductDao.getInstance();
         cartService = DefaultCartService.getInstance();
     }
 

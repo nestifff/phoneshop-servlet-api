@@ -9,10 +9,6 @@
             ${product.description}
     </h1>
 
-
-    <div>
-        ${cart}
-    </div>
     <c:if test="${not empty param.message and empty error}">
         <p class="greenText">
                 ${param.message}
@@ -50,7 +46,7 @@
     <br>
     <form method="post">
         <p>Quantity: </p>
-        <input name="quantity" value="${not empty error ? param.quantity : 1}">
+        <input class="inputQuantity" name="quantity" value="${not empty error ? param.quantity : 1}">
         <button>Add to cart</button>
         <c:if test="${not empty error}">
             <div class="redText">

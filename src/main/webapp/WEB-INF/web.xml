@@ -32,9 +32,41 @@
     <url-pattern>/products/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>cart</servlet-name>
+    <servlet-class>com.es.phoneshop.web.servlets.CartPageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cart</servlet-name>
+    <url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>deleteCartItem</servlet-name>
+    <servlet-class>com.es.phoneshop.web.servlets.DeleteCartItemServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deleteCartItem</servlet-name>
+    <url-pattern>/cart/deleteCartItem/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>miniCart</servlet-name>
+    <servlet-class>com.es.phoneshop.web.servlets.MiniCartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>miniCart</servlet-name>
+    <url-pattern>/cart/miniCart</url-pattern>
+  </servlet-mapping>
+
   <error-page>
     <location>/WEB-INF/pages/error_code500.jsp</location>
     <error-code>500</error-code>
+  </error-page>
+
+  <error-page>
+    <location>/WEB-INF/pages/error_code404.jsp</location>
+    <error-code>404</error-code>
   </error-page>
 
 </web-app>

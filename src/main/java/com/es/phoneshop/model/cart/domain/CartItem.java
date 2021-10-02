@@ -2,9 +2,11 @@ package com.es.phoneshop.model.cart.domain;
 
 import com.es.phoneshop.model.product.domain.Product;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
-public class CartItem {
+public class CartItem implements Serializable {
 
     private final Product product;
     private int quantity;
@@ -12,6 +14,10 @@ public class CartItem {
     public CartItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
+    }
+
+    public BigDecimal getCost() {
+        return BigDecimal.valueOf(quantity * product.getPrice().intValue());
     }
 
     public Product getProduct() {
@@ -22,12 +28,8 @@ public class CartItem {
         return quantity;
     }
 
-    public void increaseQuantity(int incr) {
-        this.quantity += incr;
-    }
-
-    public void decreaseQuantity(int decr) {
-        this.quantity -= decr;
+    public void setQuantity(int newQuantity) {
+        quantity = newQuantity;
     }
 
     @Override
@@ -43,12 +45,13 @@ public class CartItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartItem cartItem = (CartItem) o;
-        return quantity == cartItem.quantity &&
-                Objects.equals(product, cartItem.product);
+        return product.equals(cartItem.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(product, quantity);
+        return Objects.hash(product);
     }
+
+
 }

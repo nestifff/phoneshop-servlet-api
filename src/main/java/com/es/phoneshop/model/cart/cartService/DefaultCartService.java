@@ -2,14 +2,12 @@ package com.es.phoneshop.model.cart.cartService;
 
 import com.es.phoneshop.model.cart.domain.Cart;
 import com.es.phoneshop.model.cart.domain.CartItem;
-import com.es.phoneshop.model.exceptions.ProductNotFoundInDaoException;
-import com.es.phoneshop.model.exceptions.ProductStockLessThenRequiredException;
-import com.es.phoneshop.model.exceptions.QuantityLessThenZeroException;
 import com.es.phoneshop.model.product.domain.Product;
 import com.es.phoneshop.model.product.productDao.ArrayListProductDao;
 import com.es.phoneshop.model.product.productDao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 
 public class DefaultCartService implements CartService {
 
@@ -51,28 +49,102 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public void add(Cart cart, Long productId, int quantity) throws ProductNotFoundInDaoException, ProductStockLessThenRequiredException, QuantityLessThenZeroException {
+    public void add(Cart cart, Long productId, int newQuantity) {
         synchronized (cart) {
-
-            if (quantity <= 0) {
-                throw new QuantityLessThenZeroException("Quantity must be positive number");
-            }
 
             Product product = productDao.getProduct(productId);
             if (product == null) {
-                throw new ProductNotFoundInDaoException("Product not exist");
-            }
-            if (product.getStock() < quantity) {
-                throw new ProductStockLessThenRequiredException("Stock: " + product.getStock() + " is less then required: " + quantity);
+                throw new IllegalArgumentException("Product not exist");
             }
 
-            CartItem presentItem = cart.getItems().stream().filter(it -> product.equals(it.getProduct())).findAny().orElse(null);
+            CartItem presentItem = cart.getItems().stream()
+                    .filter(item -> productId.equals(item.getProduct().getId()))
+                    .findAny()
+                    .orElse(null);
+
             if (presentItem != null) {
-                presentItem.increaseQuantity(quantity);
+                update(cart, productId, presentItem.getQuantity() + newQuantity);
+
             } else {
-                cart.getItems().add(new CartItem(product, quantity));
+                checkPositive(newQuantity);
+                checkStockEnough(product, newQuantity);
+
+                CartItem newItem = new CartItem(product, newQuantity);
+                cart.getItems().add(newItem);
+                product.setStock(product.getStock() - newQuantity);
+
+                recalculateCart(cart);
             }
-            product.setStock(product.getStock() - quantity);
         }
     }
+
+    @Override
+    public void update(Cart cart, Long productId, int newQuantity) {
+        synchronized (cart) {
+
+            checkPositive(newQuantity);
+
+            Product product = productDao.getProduct(productId);
+            CartItem presentItem = cart.getItems().stream()
+                    .filter(item -> productId.equals(item.getProduct().getId()))
+                    .findAny()
+                    .orElse(null);
+
+            int oldQuality = presentItem.getQuantity();
+            if (oldQuality == newQuantity) {
+                return;
+            }
+            if (oldQuality < newQuantity) {
+                checkStockEnough(product, newQuantity - oldQuality);
+            }
+
+            product.setStock(product.getStock() - (newQuantity - oldQuality));
+            presentItem.setQuantity(newQuantity);
+
+            recalculateCart(cart);
+        }
+    }
+
+    @Override
+    public void delete(Cart cart, Long productId) {
+        CartItem itemToDelete = cart.getItems().stream()
+                .filter(item -> productId.equals(item.getProduct().getId()))
+                .findAny()
+                .orElse(null);
+
+        if (itemToDelete != null) {
+
+            itemToDelete.getProduct().setStock(itemToDelete.getProduct().getStock() + itemToDelete.getQuantity());
+            cart.getItems().remove(itemToDelete);
+
+            recalculateCart(cart);
+        }
+    }
+
+    private void recalculateCart(Cart cart) {
+
+        int totalQuantity = cart.getItems().stream()
+                .map(CartItem::getQuantity)
+                .reduce(0, Integer::sum);
+
+        BigDecimal totalCost = cart.getItems().stream()
+                .map(CartItem::getCost)
+                .reduce(new BigDecimal(0), BigDecimal::add);
+
+        cart.setTotalQuantity(totalQuantity);
+        cart.setTotalCost(totalCost);
+    }
+
+    private void checkStockEnough(Product product, int quantityToAdd) {
+        if (product.getStock() < quantityToAdd) {
+            throw new IllegalArgumentException("Stock: " + product.getStock() + " is less then required: " + quantityToAdd);
+        }
+    }
+
+    private void checkPositive(int quantityToAdd) {
+        if (quantityToAdd <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive number");
+        }
+    }
+
 }

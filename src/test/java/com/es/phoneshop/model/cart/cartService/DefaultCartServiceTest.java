@@ -8,11 +8,15 @@ import com.es.phoneshop.model.product.productDao.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 
 import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
+import static com.es.phoneshop.testUtils.CartOrderCreator.anyFilledCart;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class DefaultCartServiceTest {
 
@@ -199,6 +203,20 @@ public class DefaultCartServiceTest {
         cartService.delete(cart, id);
 
         assertEquals(cartItemsOld, cart.getItems());
+    }
+
+    @Test
+    public void clearCart_allRight() {
+        Cart cart = anyFilledCart();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        when(request.getSession()).thenReturn(mock(HttpSession.class));
+        cartService.clearCart(request, cart);
+
+        assertEquals(0, cart.getItems().size());
+        assertEquals(0, cart.getTotalQuantity());
+        assertEquals(cart.getTotalCost(), BigDecimal.ZERO);
+        verify(request.getSession()).setAttribute(any(), eq(null));
     }
 
 }

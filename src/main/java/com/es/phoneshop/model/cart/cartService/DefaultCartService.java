@@ -8,6 +8,7 @@ import com.es.phoneshop.model.product.productDao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class DefaultCartService implements CartService {
 
@@ -119,6 +120,13 @@ public class DefaultCartService implements CartService {
 
             recalculateCart(cart);
         }
+    }
+
+    @Override
+    public void clearCart(HttpServletRequest request, Cart cart) {
+        cart.setItems(new ArrayList<>());
+        recalculateCart(cart);
+        request.getSession().setAttribute(CART_SESSION_ATTRIBUTE, null);
     }
 
     private void recalculateCart(Cart cart) {

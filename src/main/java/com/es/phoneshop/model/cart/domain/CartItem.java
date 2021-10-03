@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class CartItem implements Serializable {
+public class CartItem implements Serializable, Cloneable {
 
     private final Product product;
     private int quantity;
@@ -14,6 +14,11 @@ public class CartItem implements Serializable {
     public CartItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public BigDecimal getCost() {
@@ -52,6 +57,5 @@ public class CartItem implements Serializable {
     public int hashCode() {
         return Objects.hash(product);
     }
-
 
 }

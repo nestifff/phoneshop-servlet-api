@@ -13,6 +13,8 @@ public interface CartService {
     void update(Cart cart, Long productId, int newQuantity);
 
     void delete(Cart cart, Long productId);
+
+    void clearCart(HttpServletRequest request, Cart cart);
 }
 
 

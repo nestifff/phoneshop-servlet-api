@@ -8,11 +8,15 @@ import com.es.phoneshop.model.product.productDao.ProductDao;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 
 import static com.es.phoneshop.model.product.demoData.DemoDataForProductDaoCreator.fillProductDaoDemoData;
+import static com.es.phoneshop.testUtils.CartOrderCreator.anyFilledCart;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class DefaultCartServiceTest {
 
@@ -184,8 +188,9 @@ public class DefaultCartServiceTest {
         Product product = productDao.getProduct(id);
         int startStock = product.getStock();
         cartService.add(cart, id, 5);
-        cartService.delete(cart, id);
+        boolean isDeleted = cartService.delete(cart, id);
 
+        assertTrue(isDeleted);
         assertTrue(cart.getItems().isEmpty());
         assertEquals(product.getStock(), startStock);
         assertEquals(cart.getTotalCost(), BigDecimal.valueOf(0));
@@ -196,9 +201,24 @@ public class DefaultCartServiceTest {
     public void delete_notExist() {
         Long id = 100000L;
         List<CartItem> cartItemsOld = cart.getItems();
-        cartService.delete(cart, id);
+        boolean isDeleted = cartService.delete(cart, id);
 
+        assertFalse(isDeleted);
         assertEquals(cartItemsOld, cart.getItems());
+    }
+
+    @Test
+    public void clearCart_allRight() {
+        Cart cart = anyFilledCart();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        when(request.getSession()).thenReturn(mock(HttpSession.class));
+        cartService.clearCart(request, cart);
+
+        assertEquals(0, cart.getItems().size());
+        assertEquals(0, cart.getTotalQuantity());
+        assertEquals(cart.getTotalCost(), BigDecimal.ZERO);
+        verify(request.getSession()).setAttribute(any(), eq(null));
     }
 
 }

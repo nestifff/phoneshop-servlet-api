@@ -188,8 +188,9 @@ public class DefaultCartServiceTest {
         Product product = productDao.getProduct(id);
         int startStock = product.getStock();
         cartService.add(cart, id, 5);
-        cartService.delete(cart, id);
+        boolean isDeleted = cartService.delete(cart, id);
 
+        assertTrue(isDeleted);
         assertTrue(cart.getItems().isEmpty());
         assertEquals(product.getStock(), startStock);
         assertEquals(cart.getTotalCost(), BigDecimal.valueOf(0));
@@ -200,8 +201,9 @@ public class DefaultCartServiceTest {
     public void delete_notExist() {
         Long id = 100000L;
         List<CartItem> cartItemsOld = cart.getItems();
-        cartService.delete(cart, id);
+        boolean isDeleted = cartService.delete(cart, id);
 
+        assertFalse(isDeleted);
         assertEquals(cartItemsOld, cart.getItems());
     }
 

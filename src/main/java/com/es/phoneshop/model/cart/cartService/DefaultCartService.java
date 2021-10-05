@@ -107,7 +107,7 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public void delete(Cart cart, Long productId) {
+    public boolean delete(Cart cart, Long productId) {
         CartItem itemToDelete = cart.getItems().stream()
                 .filter(item -> productId.equals(item.getProduct().getId()))
                 .findAny()
@@ -119,7 +119,10 @@ public class DefaultCartService implements CartService {
             cart.getItems().remove(itemToDelete);
 
             recalculateCart(cart);
+            return true;
         }
+
+        return false;
     }
 
     @Override

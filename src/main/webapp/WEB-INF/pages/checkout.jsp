@@ -65,7 +65,7 @@
             <table>
                 <tags:orderPlaceRow name="firstName" label="First name" order="${order}" errors="${errors}"/>
                 <tags:orderPlaceRow name="lastName" label="Last name" order="${order}" errors="${errors}"/>
-                <tags:orderPlaceRow name="phone" label="Phone" order="${order}" errors="${errors}"/>
+                <tags:orderPlaceRow name="phone" label="Phone, please, use only numbers and (optional) \"+\" at the beginning" order="${order}" errors="${errors}"/>
                 <tags:orderPlaceRow name="deliveryDate" label="Delivery date in format yyyy-mm-dd" order="${order}" errors="${errors}"/>
                 <tags:orderPlaceRow name="deliveryAddress" label="Address" order="${order}" errors="${errors}"/>
 

@@ -25,6 +25,8 @@ public class CheckoutPageServlet extends HttpServlet {
     private CartService cartService;
     private OrderService orderService;
 
+    private static final String PHONE_PATTERN = "\\+?\\d{7,10}";
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -54,7 +56,7 @@ public class CheckoutPageServlet extends HttpServlet {
 
         setRequiredParameter(request, "firstName", errors, order::setFirstName, getPredicateCheckStringPresent());
         setRequiredParameter(request, "lastName", errors, order::setLastName, getPredicateCheckStringPresent());
-        setRequiredParameter(request, "phone", errors, order::setPhone, value -> value != null && value.length() > 0 && value.matches("\\+?\\d{7,10}"));
+        setRequiredParameter(request, "phone", errors, order::setPhone, value -> value != null && value.length() > 0 && value.matches(PHONE_PATTERN));
         setRequiredParameter(request, "deliveryAddress", errors, order::setDeliveryAddress, getPredicateCheckStringPresent());
 
         try {

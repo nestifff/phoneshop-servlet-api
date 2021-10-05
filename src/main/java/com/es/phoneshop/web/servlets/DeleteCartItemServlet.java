@@ -21,12 +21,24 @@ public class DeleteCartItemServlet extends HttpServlet {
         cartService = DefaultCartService.getInstance();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        Long productId = Long.valueOf(request.getPathInfo().substring(1));
-        Cart cart = cartService.getCart(request);
-        cartService.delete(cart, productId);
+        try {
+            Long productId = Long.valueOf(request.getPathInfo().substring(1));
+            Cart cart = cartService.getCart(request);
 
-        response.sendRedirect(request.getContextPath() + "/cart?message=Cart item deleted successfully");
+            if (cartService.delete(cart, productId)) {
+                response.sendRedirect(request.getContextPath() + "/cart?message=Cart item deleted successfully");
+            } else {
+                throw new RuntimeException("");
+            }
+
+        } catch (Exception ex) {
+            String idStr = request.getPathInfo().substring(1).length() > 0 ? request.getPathInfo().substring(1) : "empty";
+            request.setAttribute("productId", idStr);
+            request.getRequestDispatcher("/WEB-INF/pages/errorProductNotFound.jsp").forward(request, response);
+        }
+
+
     }
 }

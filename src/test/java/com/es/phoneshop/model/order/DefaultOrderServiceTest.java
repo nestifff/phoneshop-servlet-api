@@ -50,7 +50,7 @@ public class DefaultOrderServiceTest {
 
     @Test
     public void getPaymentMethods_test() {
-        assertEquals(orderService.getPaymentMethods().get(0), PaymentMethod.CACHE);
+        assertEquals(orderService.getPaymentMethods().get(0), PaymentMethod.CASH);
         assertEquals(orderService.getPaymentMethods().get(1), PaymentMethod.CREDIT_CARD);
     }
 

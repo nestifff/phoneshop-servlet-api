@@ -98,6 +98,104 @@ public class ArrayListProductDaoTest {
     }
 
     @Test
+    public void findAdvancedProducts_returnCorrectEmptyQuery() {
+        List<Product> testProducts = productDao.findAdvancedProducts("", null, null, SearchAdvancedOption.ALL_WORDS);
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null
+                                || it.getStock() <= 0);
+
+        assertFalse(haveNotProper);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void findAdvancedProducts_returnCorrectEmptyQueryMinPrice() {
+        List<Product> testProducts = productDao.findAdvancedProducts("", null, BigDecimal.valueOf(200), SearchAdvancedOption.ALL_WORDS);
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0 || it.getPrice().intValue() < 200);
+
+        assertFalse(haveNotProper);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void findAdvancedProducts_returnCorrectEmptyQueryMaxPrice() {
+        List<Product> testProducts = productDao.findAdvancedProducts("", BigDecimal.valueOf(500), null, SearchAdvancedOption.ALL_WORDS);
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0 || it.getPrice().intValue() > 500);
+
+        assertFalse(haveNotProper);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void findAdvancedProducts_returnCorrectEmptyQueryMinMaxPrice() {
+        List<Product> testProducts = productDao.findAdvancedProducts("", BigDecimal.valueOf(500), BigDecimal.valueOf(200), SearchAdvancedOption.ALL_WORDS);
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0 || it.getPrice().intValue() > 500 || it.getPrice().intValue() < 200);
+
+        assertFalse(haveNotProper);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void findAdvancedProducts_returnCorrectEmptyQueryMinMaxPriceAnyWords() {
+        List<Product> testProducts = productDao.findAdvancedProducts("", BigDecimal.valueOf(500), BigDecimal.valueOf(200), SearchAdvancedOption.ANY_WORDS);
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0 || it.getPrice().intValue() > 500 || it.getPrice().intValue() < 200);
+
+        assertFalse(haveNotProper);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void findAdvancedProducts_returnCorrectQueryAnyWords() {
+        List<Product> testProducts = productDao.findAdvancedProducts("Samsung S", BigDecimal.valueOf(800), BigDecimal.valueOf(200), SearchAdvancedOption.ANY_WORDS);
+
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0 || it.getPrice().intValue() > 500 || it.getPrice().intValue() < 200);
+
+        boolean isFoundedWithMatching = testProducts.stream()
+                .allMatch(it ->
+                        ProductDaoFindProductsUtils.areStringsContainsCommonWords(it.getDescription(), "Samsung S"));
+
+
+        assertFalse(haveNotProper);
+        assertTrue(isFoundedWithMatching);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void findAdvancedProducts_returnCorrectQueryAllWords() {
+        List<Product> testProducts = productDao.findAdvancedProducts("Samsung Galaxy S", BigDecimal.valueOf(800), null, SearchAdvancedOption.ALL_WORDS);
+
+        boolean haveNotProper = testProducts.stream()
+                .anyMatch(it ->
+                        it.getPrice() == null || it.getStock() <= 0 || it.getPrice().intValue() > 500);
+
+        boolean isFoundedWithMatchingAll = testProducts.stream()
+                .allMatch(it ->
+                        ProductDaoFindProductsUtils.areAllWordsMatched(it.getDescription(), "Samsung Galaxy S"));
+
+
+        assertFalse(haveNotProper);
+        assertTrue(isFoundedWithMatchingAll);
+        assertTrue(testProducts.size() > 0);
+    }
+
+    @Test
+    public void getAdvancedSearchOptions_test() {
+        assertEquals(productDao.getAdvancedSearchOptions().get(1), SearchAdvancedOption.ANY_WORDS);
+        assertEquals(productDao.getAdvancedSearchOptions().get(0), SearchAdvancedOption.ALL_WORDS);
+    }
+
+    @Test
     public void get_Product() {
         assertNotNull(productDao.getProduct(1L));
     }

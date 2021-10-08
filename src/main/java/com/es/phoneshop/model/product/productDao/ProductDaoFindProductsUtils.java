@@ -4,6 +4,7 @@ import com.es.phoneshop.model.product.domain.Product;
 import com.es.phoneshop.model.product.productSortEnums.SortField;
 import com.es.phoneshop.model.product.productSortEnums.SortOrder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,6 +26,17 @@ public class ProductDaoFindProductsUtils {
                 Arrays.asList(query.toLowerCase().split(" ")),
                 Arrays.asList(whereFind.toLowerCase().split(" "))
         );
+    }
+
+    public static boolean areAllWordsMatched(String query, String whereFind) {
+
+        List<String> queryWords = Arrays.asList(query.toLowerCase().split(" "));
+        List<String> productDescriptionWords = Arrays.asList(whereFind.toLowerCase().split(" "));
+
+        Collections.sort(queryWords);
+        Collections.sort(productDescriptionWords);
+
+        return queryWords.equals(productDescriptionWords) || query.isEmpty();
     }
 
     public static int compare(Product product1, Product product2, SortField sortField, SortOrder sortOrder, String query) {
@@ -81,5 +93,13 @@ public class ProductDaoFindProductsUtils {
         }
 
         return 0;
+    }
+
+    public static boolean compareWithMinMaxPrice(Product product, BigDecimal minPrice, BigDecimal maxPrice) {
+
+        return (
+                ((minPrice == null) || (product.getPrice().doubleValue() >= minPrice.doubleValue())) &&
+                        ((maxPrice == null) || (product.getPrice().doubleValue() <= maxPrice.doubleValue()))
+        );
     }
 }

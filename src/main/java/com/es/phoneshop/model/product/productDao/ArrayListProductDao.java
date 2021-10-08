@@ -4,7 +4,9 @@ import com.es.phoneshop.model.product.domain.Product;
 import com.es.phoneshop.model.product.productSortEnums.SortField;
 import com.es.phoneshop.model.product.productSortEnums.SortOrder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -17,7 +19,7 @@ public class ArrayListProductDao implements ProductDao {
     private static volatile ProductDao instance;
 
     private long maxId;
-    private List<Product> products;
+    private final List<Product> products;
     ReadWriteLock lock;
 
     private ArrayListProductDao() {
@@ -68,6 +70,33 @@ public class ArrayListProductDao implements ProductDao {
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    @Override
+    public List<Product> findAdvancedProducts(String query, BigDecimal maxPrice, BigDecimal minPrice, SearchAdvancedOption searchOptions) {
+
+        lock.readLock().lock();
+        try {
+            if (searchOptions == SearchAdvancedOption.ANY_WORDS) {
+                return findProducts(query, null, null).stream()
+                        .filter(it -> compareWithMinMaxPrice(it, minPrice, maxPrice))
+                        .collect(Collectors.toList());
+            } else {
+                return products.stream()
+                        .filter(it -> it.getPrice() != null && it.getStock() > 0)
+                        .filter(it -> needToAddThisProduct(query, it))
+                        .filter(it -> areAllWordsMatched(query, it.getDescription()))
+                        .filter(it -> compareWithMinMaxPrice(it, minPrice, maxPrice))
+                        .collect(Collectors.toList());
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public List<SearchAdvancedOption> getAdvancedSearchOptions() {
+        return Arrays.asList(SearchAdvancedOption.values());
     }
 
     @Override

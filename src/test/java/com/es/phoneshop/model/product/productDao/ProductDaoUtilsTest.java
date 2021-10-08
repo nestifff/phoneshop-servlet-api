@@ -3,7 +3,6 @@ package com.es.phoneshop.model.product.productDao;
 import com.es.phoneshop.model.product.domain.Product;
 import com.es.phoneshop.model.product.productSortEnums.SortField;
 import com.es.phoneshop.model.product.productSortEnums.SortOrder;
-import com.es.phoneshop.testUtils.ProductCreator;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -11,31 +10,32 @@ import java.util.Currency;
 import java.util.List;
 
 import static com.es.phoneshop.model.product.productDao.ProductDaoFindProductsUtils.*;
+import static com.es.phoneshop.testUtils.ProductCreator.getProduct;
 import static org.junit.Assert.*;
 
 public class ProductDaoUtilsTest {
 
     @Test
     public void needToAddThisProduct_queryNull() {
-        Product product = ProductCreator.getProduct();
+        Product product = getProduct();
         assertTrue(needToAddThisProduct(null, product));
     }
 
     @Test
     public void needToAddThisProduct_queryEmpty() {
-        Product product = ProductCreator.getProduct();
+        Product product = getProduct();
         assertTrue(needToAddThisProduct("", product));
     }
 
     @Test
     public void needToAddThisProduct_containsMatchingWords() {
-        Product product = ProductCreator.getProduct();
+        Product product = getProduct();
         assertTrue(needToAddThisProduct("S", product));
     }
 
     @Test
     public void needToAddThisProduct_not_Match() {
-        Product product = ProductCreator.getProduct();
+        Product product = getProduct();
         assertFalse(needToAddThisProduct("Apple", product));
     }
 
@@ -58,6 +58,27 @@ public class ProductDaoUtilsTest {
         String str1 = "";
         String str2 = "asUs galaxy iphone JAVA";
         assertFalse(areStringsContainsCommonWords(str1, str2));
+    }
+
+    @Test
+    public void areAllWordsMatched_true() {
+        String str1 = "Samsung Apple Asus";
+        String str2 = "AsUs Samsung Apple";
+        assertTrue(areAllWordsMatched(str1, str2));
+    }
+
+    @Test
+    public void areAllWordsMatched_false() {
+        String str1 = "Samsung Apple Asus";
+        String str2 = "AsUs Samsung";
+        assertFalse(areAllWordsMatched(str1, str2));
+    }
+
+    @Test
+    public void areAllWordsMatched_empty() {
+        String str1 = "";
+        String str2 = "AsUs Samsung";
+        assertTrue(areAllWordsMatched(str1, str2));
     }
 
     @Test
@@ -131,5 +152,39 @@ public class ProductDaoUtilsTest {
         assertTrue(compare(product1, product2, SortField.DESCRIPTION, SortOrder.ASC, query) < 0);
     }
 
+    @Test
+    public void compareWithMinMaxPrice_testNull() {
+        Product product = getProduct(); // 100
+        assertTrue(compareWithMinMaxPrice(product, null, null));
+    }
 
+    @Test
+    public void compareWithMinMaxPrice_testNull2() {
+        Product product = getProduct(); // 100
+        assertTrue(compareWithMinMaxPrice(product, null, BigDecimal.valueOf(200)));
+    }
+
+    @Test
+    public void compareWithMinMaxPrice_testNull3() {
+        Product product = getProduct(); // 100
+        assertTrue(compareWithMinMaxPrice(product, BigDecimal.valueOf(80), null));
+    }
+
+    @Test
+    public void compareWithMinMaxPrice_test5() {
+        Product product = getProduct(); // 100
+        assertTrue(compareWithMinMaxPrice(product, BigDecimal.valueOf(80), BigDecimal.valueOf(200)));
+    }
+
+    @Test
+    public void compareWithMinMaxPrice_tes6() {
+        Product product = getProduct(); // 100
+        assertFalse(compareWithMinMaxPrice(product, BigDecimal.valueOf(150), BigDecimal.valueOf(200)));
+    }
+
+    @Test
+    public void compareWithMinMaxPrice_tes7() {
+        Product product = getProduct(); // 100
+        assertFalse(compareWithMinMaxPrice(product, BigDecimal.valueOf(50), BigDecimal.valueOf(80)));
+    }
 }
